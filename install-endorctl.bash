@@ -64,7 +64,7 @@ while getopts "h?d:v:o:" option; do
             ;;
         d)
             endorctl_sha256="${OPTARG}"
-            >&2 echo ".. Using specified SHA256 hash '${endorctl_sha26}' for verification"
+            >&2 echo ".. Using specified SHA256 hash '${endorctl_sha256}' for verification"
             ;;
         v)
             endorctl_version="$(echo "${OPTARG}" | tr '[:upper:]' '[:lower:]')"
@@ -152,7 +152,7 @@ if [[ -n "${endorctl_sha256}" ]]; then
         exit 4
     fi
     if [[ -z "${validated_digest}" ]]; then
-        >&2 echo "ERROR: unable to validate diegest of '${endorctl_path}', quitting"
+        >&2 echo "ERROR: unable to validate digest of '${endorctl_path}', quitting"
         exit 4
     fi
 else
