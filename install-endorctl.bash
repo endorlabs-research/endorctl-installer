@@ -39,6 +39,7 @@ function webget() {
     URL=${1}
     FILE=${2:-}
     if [[ -x "$(which curl)" ]]; then
+
         if [[ -z "${FILE}" ]]; then
             curl -fsSL "${URL}"
         else
@@ -65,12 +66,6 @@ while getopts "h?d:v:o:" option; do
             endorctl_sha256="${OPTARG}"
             >&2 echo ".. Using specified SHA256 hash '${endorctl_sha26}' for verification"
             ;;
-        # r)
-        #     endorctl_run_args="---"
-        #     ;;
-        # s)
-        #     endorctl_run_args="scan"
-        #     ;;
         v)
             endorctl_version="$(echo "${OPTARG}" | tr '[:upper:]' '[:lower:]')"
             [[ "${endorctl_version}" =~ ^v ]] || endorctl_version="v${endorctl_version}"
