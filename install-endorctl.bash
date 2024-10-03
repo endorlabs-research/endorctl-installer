@@ -123,7 +123,7 @@ case $machine_arch in
 esac
 
 >&2 echo "Machine is ${machine_os} on ${machine_arch}"
-if [[ "${machine_os}" == "linux" ]] && [[ "${machine_arch}" != "amd64 " ]]; then
+if [[ "${machine_os}" == "linux" ]] && [[ "${machine_arch}" != "amd64" ]]; then
     >&2 echo "WARN: Linux on non x64/amd64 may not be supported"
 fi
 
