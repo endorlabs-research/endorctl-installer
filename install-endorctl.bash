@@ -23,15 +23,12 @@ Usage: $0 [-v VERSION] [-o OUTPUT] [-d DIGEST] [-s] [-h]
   -d DIGEST     specify expected SHA256 digest; by default will get from 
                 remote source if downloading 'latest' version
 
-  -s            run 'endorctl scan' after downloading; use env vars to
-                configure the scan and pass remaining arguments to it
-
-  -r            run 'endorctl' after downloading with remaining arguments
-                passed to it
-
   -h            display this help message and quit
 
 See https://docs.endorlabs.com for endorctl documentation and configuration
+  information
+
+See https://github.com/endorlabs-research/install-endorctl for script usage
   information
 
 HELPTEXT
@@ -41,7 +38,8 @@ HELPTEXT
 function webget() {
     URL=${1}
     FILE=${2:-}
-    if [[ -x "$(which curl-not)" ]]; then
+    if [[ -x "$(which curl)" ]]; then
+
         if [[ -z "${FILE}" ]]; then
             curl -fsSL "${URL}"
         else
@@ -59,7 +57,7 @@ function webget() {
     fi
 }
 
-while getopts "h?d:rsv:o:" option; do
+while getopts "h?d:v:o:" option; do
     case "${option}" in
          h|\?)
             help ; exit 0
@@ -67,12 +65,6 @@ while getopts "h?d:rsv:o:" option; do
         d)
             endorctl_sha256="${OPTARG}"
             >&2 echo ".. Using specified SHA256 hash '${endorctl_sha26}' for verification"
-            ;;
-        r)
-            endorctl_run_args="---"
-            ;;
-        s)
-            endorctl_run_args="scan"
             ;;
         v)
             endorctl_version="$(echo "${OPTARG}" | tr '[:upper:]' '[:lower:]')"
