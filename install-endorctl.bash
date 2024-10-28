@@ -162,3 +162,31 @@ fi
 chmod +x "${endorctl_path}"
 >&2 echo "SUCCESS downloading '${endorctl_path}'"
 echo "${endorctl_path}"
+endorctl_dir="$(readlink -f "$(dirname "${endorctl_path}")")"
+
+## If in GitHub, add the dir for $endorctl_path to the PATH definition for future steps
+if [[ -n "${GITHUB_PATH}" ]]; then
+    >&2 echo "Detected running in GitHub environment"
+    if [[ "$(readlink -f '.')" == "${endorctl_dir}" ]]; then
+        >&2 echo "!! HEY !! it's dangerous to add the current working directory to your PATH, so I'm not doing that"
+    else
+        >&2 echo "adding '${endorctl_dir}' to end of PATH"
+        echo "${endorctl_dir}" >> "${GITHUB_PATH}"
+    fi
+fi
+
+## If in GitLab add the dir for $endorctl_path to the PATH definition for other actions in the same stage
+if [[ -n "${GITLAB_ENV}" ]]; then
+    >&2 echo "Detected running in GitLab environment"
+    if [[ "$(readlink -f '.')" == "${endorctl_dir}" ]]; then
+        >&2 echo "!! HEY !! it's dangerous to add the current working directory to your PATH, so I'm not doing that"
+    else
+        >&2 echo "adding '${endorctl_dir}' to end of PATH"
+        echo "PATH=${PATH}:${endorctl_dir}" >> "${GITLAB_ENV}"
+    fi
+fi
+
+## If in Jenkins, print instructions for adding endorctl path to PATH
+if [[ -n "${JENKINS_HOME}" ]]; then
+    >&2 echo "Detected Jenkins; automatic path setting not available. See https://github.com/endorlabs-research/endorctl-installer/blob/main/README.md#example-for-jenkins"
+fi
